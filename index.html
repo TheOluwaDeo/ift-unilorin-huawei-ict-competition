@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IFT UNILORIN · Huawei ICT 2026–2027 Command Center</title>
+<meta name="description" content="Practice team command center for the IFT UNILORIN Huawei ICT Competition 2026-2027 preparation cycle.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --bg:#0A0E17; --bg-panel:#121826; --bg-panel-alt:#161E2E; --bg-raised:#1B2436;
+  --border:#263048; --border-soft:#1D2536;
+  --text:#E7ECF5; --text-dim:#93A0B8; --text-faint:#5D6B85;
+  --red:#D2153A; --red-dim:#7A1329;
+  --cyan:#3FD1C7; --cyan-dim:#164B47;
+  --amber:#E8A33D; --amber-dim:#4A3312;
+  --green:#4ADE80; --green-dim:#153A26;
+  --violet:#8B7CF6;
+  --radius-sm:6px; --radius:12px; --radius-lg:18px;
+  --font-display:'Space Grotesk',system-ui,sans-serif;
+  --font-body:'Inter',system-ui,sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,monospace;
+  --shadow: 0 8px 28px -8px rgba(0,0,0,.5);
+  --sidebar-w: 264px;
+}
+html[data-theme="light"]{
+  --bg:#F3F5F9; --bg-panel:#FFFFFF; --bg-panel-alt:#EBEFF6; --bg-raised:#FFFFFF;
+  --border:#D9DFEA; --border-soft:#E4E9F1;
+  --text:#131A26; --text-dim:#4B5A72; --text-faint:#8493AB;
+  --red:#B80F32; --red-dim:#FBE1E6;
+  --cyan:#0E8F86; --cyan-dim:#DAF3F1;
+  --amber:#B5780E; --amber-dim:#FBEBD3;
+  --green:#1D9A57; --green-dim:#DDF4E7;
+  --violet:#6656D9;
+  --shadow: 0 8px 28px -10px rgba(20,30,50,.18);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg); color:var(--text); font-family:var(--font-body);
+  font-size:15px; line-height:1.55; -webkit-font-smoothing:antialiased;
+  background-image:
+    linear-gradient(var(--border-soft) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-soft) 1px, transparent 1px);
+  background-size: 44px 44px;
+  background-attachment: fixed;
+}
+h1,h2,h3,h4{font-family:var(--font-display); font-weight:600; margin:0 0 .4em; letter-spacing:-.01em;}
+p{margin:0 0 .8em;}
+a{color:var(--cyan);}
+.mono{font-family:var(--font-mono);}
+button{font-family:inherit; cursor:pointer;}
+input,select,textarea{font-family:inherit; font-size:14px;}
+:focus-visible{outline:2px solid var(--cyan); outline-offset:2px;}
+.skip-link{position:absolute; left:-999px; top:0; background:var(--cyan); color:#00201E; padding:10px 16px; z-index:200; border-radius:0 0 8px 0;}
+.skip-link:focus{left:0;}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
+}
+
+/* ============ LAYOUT ============ */
+.app{display:flex; min-height:100vh;}
+.sidebar{
+  width:var(--sidebar-w); flex-shrink:0; position:fixed; top:0; left:0; bottom:0;
+  background:var(--bg-panel); border-right:1px solid var(--border);
+  display:flex; flex-direction:column; z-index:60; transition:transform .25s ease;
+}
+.brand{padding:22px 20px 16px; border-bottom:1px solid var(--border-soft);}
+.brand .tag{font-family:var(--font-mono); font-size:11px; color:var(--cyan); letter-spacing:.08em;}
+.brand h1{font-size:17px; line-height:1.25; margin:6px 0 2px;}
+.brand .sub{font-size:12px; color:var(--text-dim);}
+.navlist{list-style:none; margin:0; padding:10px; overflow-y:auto; flex:1;}
+.navlist li{margin-bottom:2px;}
+.navbtn{
+  width:100%; text-align:left; background:none; border:none; color:var(--text-dim);
+  padding:10px 12px; border-radius:var(--radius-sm); font-size:13.5px; font-weight:500;
+  display:flex; align-items:center; gap:10px; transition:background .15s, color .15s;
+}
+.navbtn .ico{width:18px; text-align:center; font-family:var(--font-mono); font-size:12px; opacity:.8;}
+.navbtn:hover{background:var(--bg-panel-alt); color:var(--text);}
+.navbtn[aria-current="page"]{background:var(--red-dim); color:var(--red);}
+html[data-theme="light"] .navbtn[aria-current="page"]{color:var(--red); background:var(--red-dim);}
+.sidebar-foot{padding:14px 18px; border-top:1px solid var(--border-soft); font-size:11px; color:var(--text-faint); font-family:var(--font-mono);}
+
+.main{margin-left:var(--sidebar-w); flex:1; min-width:0; padding:28px 30px 90px;}
+.topbar{display:flex; align-items:center; gap:12px; margin-bottom:20px; flex-wrap:wrap;}
+.hamburger{display:none;}
+.searchbox{
+  flex:1; min-width:180px; max-width:380px; display:flex; align-items:center; gap:8px;
+  background:var(--bg-panel); border:1px solid var(--border); border-radius:999px; padding:8px 14px;
+}
+.searchbox input{background:none; border:none; color:var(--text); width:100%; outline:none;}
+.topbar-actions{display:flex; gap:8px; margin-left:auto;}
+.iconbtn{
+  background:var(--bg-panel); border:1px solid var(--border); color:var(--text-dim);
+  width:38px; height:38px; border-radius:999px; display:flex; align-items:center; justify-content:center;
+  font-size:15px; transition:color .15s, border-color .15s;
+}
+.iconbtn:hover{color:var(--cyan); border-color:var(--cyan);}
+.school-pill{
+  display:none; align-items:center; gap:6px; font-family:var(--font-mono); font-size:11px;
+  background:var(--amber-dim); color:var(--amber); padding:8px 14px; border-radius:999px; border:1px solid var(--amber);
+}
+.school-pill.on{display:inline-flex;}
+
+section.view{display:none;}
+section.view.active{display:block; animation:fadein .2s ease;}
+@keyframes fadein{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:none;}}
+
+.view-head{margin-bottom:20px;}
+.eyebrow{font-family:var(--font-mono); font-size:11.5px; color:var(--cyan); margin-bottom:6px;}
+.view-head h2{font-size:24px;}
+.view-head .desc{color:var(--text-dim); max-width:640px; font-size:14px;}
+
+.grid{display:grid; gap:16px;}
+.grid.cols-4{grid-template-columns:repeat(4,1fr);}
+.grid.cols-3{grid-template-columns:repeat(3,1fr);}
+.grid.cols-2{grid-template-columns:repeat(2,1fr);}
+@media(max-width:1100px){.grid.cols-4{grid-template-columns:repeat(2,1fr);} .grid.cols-3{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:640px){.grid.cols-4,.grid.cols-3,.grid.cols-2{grid-template-columns:1fr;}}
+
+.panel{
+  background:var(--bg-panel); border:1px solid var(--border); border-radius:var(--radius);
+  padding:18px 20px;
+}
+.panel h3{font-size:14px; text-transform:none; color:var(--text); display:flex; align-items:center; justify-content:space-between; gap:8px;}
+.panel h3 .badge{font-family:var(--font-mono); font-size:10.5px; padding:2px 8px; border-radius:999px; background:var(--bg-panel-alt); color:var(--text-dim); font-weight:500;}
+
+.stat-num{font-family:var(--font-display); font-size:30px; font-weight:700; line-height:1;}
+.stat-label{font-size:12px; color:var(--text-dim); margin-top:6px;}
+.stat-sub{font-family:var(--font-mono); font-size:11px; color:var(--text-faint); margin-top:4px;}
+
+.bar{height:8px; border-radius:999px; background:var(--bg-panel-alt); overflow:hidden; margin-top:8px;}
+.bar > span{display:block; height:100%; background:linear-gradient(90deg,var(--cyan),var(--green)); border-radius:999px;}
+
+.hero{
+  border:1px solid var(--border); border-radius:var(--radius-lg); padding:32px 30px; margin-bottom:22px;
+  background:
+    radial-gradient(circle at 85% 0%, var(--red-dim), transparent 55%),
+    var(--bg-panel);
+  position:relative; overflow:hidden;
+}
+.hero .kicker{font-family:var(--font-mono); color:var(--cyan); font-size:12px; letter-spacing:.08em; margin-bottom:10px;}
+.hero h1{font-size:clamp(24px,4vw,34px); margin-bottom:4px;}
+.hero .lede{color:var(--text-dim); font-size:14.5px; max-width:520px; margin-top:8px;}
+.hero-actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:22px;}
+.btn{
+  border:1px solid var(--border); background:var(--bg-panel-alt); color:var(--text);
+  padding:10px 16px; border-radius:999px; font-size:13.5px; font-weight:600; display:inline-flex; align-items:center; gap:8px;
+  transition:transform .12s ease, border-color .15s;
+}
+.btn:hover{border-color:var(--cyan); transform:translateY(-1px);}
+.btn.primary{background:var(--red); border-color:var(--red); color:#fff;}
+.btn.primary:hover{filter:brightness(1.08);}
+.btn.ghost{background:transparent;}
+.btn.sm{padding:6px 12px; font-size:12.5px;}
+
+/* Quest & resource cards */
+.card{
+  background:var(--bg-panel); border:1px solid var(--border); border-radius:var(--radius);
+  padding:16px 18px; display:flex; flex-direction:column; gap:10px;
+}
+.card .top-row{display:flex; justify-content:space-between; align-items:flex-start; gap:10px;}
+.chip{
+  font-family:var(--font-mono); font-size:10.5px; padding:3px 9px; border-radius:999px;
+  border:1px solid var(--border); color:var(--text-dim); white-space:nowrap;
+}
+.chip.status-Locked{color:var(--text-faint); border-color:var(--border);}
+.chip.status-Available{color:var(--cyan); border-color:var(--cyan);}
+.chip.status-InProgress{color:var(--amber); border-color:var(--amber);}
+.chip.status-Completed{color:var(--green); border-color:var(--green);}
+.chip.status-NeedsReview{color:var(--red); border-color:var(--red);}
+.chip.diff-Foundation{background:var(--cyan-dim); color:var(--cyan); border-color:transparent;}
+.chip.diff-Intermediate{background:var(--amber-dim); color:var(--amber); border-color:transparent;}
+.chip.diff-Competition{background:var(--red-dim); color:var(--red); border-color:transparent;}
+.chip.diff-Advanced{background:var(--violet); color:#fff; border-color:transparent;}
+.card h4{font-size:15px;}
+.card .meta{font-size:12px; color:var(--text-faint); font-family:var(--font-mono);}
+.card-foot{display:flex; justify-content:space-between; align-items:center; margin-top:auto; gap:8px;}
+
+.filter-row{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; align-items:center;}
+.pillbtn{
+  background:var(--bg-panel); border:1px solid var(--border); color:var(--text-dim);
+  padding:6px 13px; border-radius:999px; font-size:12.5px; font-weight:500;
+}
+.pillbtn[aria-pressed="true"]{background:var(--cyan-dim); color:var(--cyan); border-color:var(--cyan);}
+.mini-search{display:flex; align-items:center; gap:6px; background:var(--bg-panel); border:1px solid var(--border); border-radius:999px; padding:6px 12px; margin-left:auto;}
+.mini-search input{background:none; border:none; color:var(--text); outline:none; width:140px;}
+
+/* Modal */
+.modal-backdrop{position:fixed; inset:0; background:rgba(6,9,16,.65); display:none; align-items:flex-start; justify-content:center; z-index:100; padding:5vh 16px; overflow-y:auto;}
+.modal-backdrop.open{display:flex;}
+.modal{background:var(--bg-panel); border:1px solid var(--border); border-radius:var(--radius-lg); max-width:640px; width:100%; padding:26px 28px; box-shadow:var(--shadow);}
+.modal-head{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:6px;}
+.modal-close{background:none; border:none; color:var(--text-dim); font-size:20px; line-height:1;}
+.modal dl{display:grid; grid-template-columns:auto 1fr; gap:6px 14px; font-size:13.5px; margin:14px 0;}
+.modal dt{color:var(--text-faint); font-family:var(--font-mono); font-size:11.5px; text-transform:uppercase; align-self:start; padding-top:2px;}
+.modal dd{margin:0; color:var(--text);}
+.modal ul.tight{margin:0; padding-left:18px;}
+.modal ul.tight li{margin-bottom:4px;}
+.modal-section{margin-top:16px; padding-top:14px; border-top:1px solid var(--border-soft);}
+.modal-section h5{font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--text-faint); margin-bottom:8px; font-family:var(--font-mono);}
+textarea, .field-input{
+  width:100%; background:var(--bg-panel-alt); border:1px solid var(--border); color:var(--text);
+  border-radius:8px; padding:9px 11px; outline:none;
+}
+select.field-input{appearance:none;}
+label.flabel{font-size:11.5px; color:var(--text-faint); font-family:var(--font-mono); display:block; margin-bottom:5px; text-transform:uppercase;}
+
+table{width:100%; border-collapse:collapse; font-size:13px;}
+table th{text-align:left; font-family:var(--font-mono); font-size:11px; text-transform:uppercase; color:var(--text-faint); border-bottom:1px solid var(--border); padding:8px 10px;}
+table td{padding:9px 10px; border-bottom:1px solid var(--border-soft); vertical-align:top;}
+table tr:last-child td{border-bottom:none;}
+.table-wrap{overflow-x:auto;}
+
+.callout{border:1px solid var(--amber); background:var(--amber-dim); color:var(--amber); border-radius:var(--radius); padding:14px 16px; font-size:13.5px;}
+.callout.info{border-color:var(--cyan); background:var(--cyan-dim); color:var(--cyan);}
+.callout.danger{border-color:var(--red); background:var(--red-dim); color:var(--red);}
+.callout strong{color:inherit;}
+
+.member-card{background:var(--bg-panel); border:1px solid var(--border); border-radius:var(--radius); padding:16px 18px;}
+.member-card .name-row{display:flex; gap:8px; align-items:center; margin-bottom:10px;}
+.avatar{width:34px; height:34px; border-radius:50%; background:var(--bg-panel-alt); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:12px; color:var(--cyan); flex-shrink:0;}
+.score-grid{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px;}
+.score-grid .fi{display:flex; flex-direction:column; gap:4px;}
+.score-grid label{font-size:10.5px; color:var(--text-faint); font-family:var(--font-mono);}
+.score-grid input{width:100%;}
+
+footer.app-foot{margin-left:var(--sidebar-w); padding:24px 30px 100px; color:var(--text-faint); font-size:12px; font-family:var(--font-mono);}
+
+/* Bottom / mobile nav */
+.mobile-topbar{display:none;}
+@media (max-width: 900px){
+  :root{--sidebar-w:0px;}
+  .sidebar{transform:translateX(-100%); width:82vw; max-width:300px; box-shadow:var(--shadow);}
+  .sidebar.open{transform:translateX(0);}
+  .main{margin-left:0; padding:18px 16px 90px;}
+  footer.app-foot{margin-left:0; padding:20px 16px 100px;}
+  .mobile-topbar{
+    display:flex; align-items:center; gap:10px; position:sticky; top:0; z-index:50;
+    background:var(--bg); padding:10px 0 14px; margin:-8px -6px 8px;
+  }
+  .hamburger{
+    display:flex; align-items:center; justify-content:center; width:40px; height:40px;
+    background:var(--bg-panel); border:1px solid var(--border); border-radius:10px; color:var(--text); font-size:18px;
+  }
+  .mobile-title{font-family:var(--font-display); font-size:14px; font-weight:600;}
+  .mobile-title span{display:block; font-family:var(--font-mono); font-size:10px; color:var(--cyan); font-weight:400;}
+  .scrim{position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:55; display:none;}
+  .scrim.open{display:block;}
+  .grid.cols-4,.grid.cols-3,.grid.cols-2{grid-template-columns:1fr;}
+  .topbar{flex-direction:column; align-items:stretch;}
+  .searchbox{max-width:none;}
+  .topbar-actions{margin-left:0; justify-content:flex-start;}
+}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<div class="app">
+  <div class="scrim" id="scrim"></div>
+  <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+    <div class="brand">
+      <div class="tag">IFT · UNILORIN</div>
+      <h1>Huawei ICT 2026–2027<br>Practice Team</h1>
+      <div class="sub">Command Center</div>
+    </div>
+    <ul class="navlist" id="navlist"></ul>
+    <div class="sidebar-foot" id="sidebarFoot">v1.0 · local-only data</div>
+  </aside>
+
+  <div style="flex:1; min-width:0;">
+    <main class="main" id="main-content">
+      <div class="mobile-topbar">
+        <button class="hamburger" id="hamburgerBtn" aria-label="Open navigation" aria-expanded="false">☰</button>
+        <div class="mobile-title">Command Center<span>IFT UNILORIN · Huawei ICT 2026–2027</span></div>
+      </div>
+
+      <div class="topbar">
+        <div class="searchbox">
+          <span aria-hidden="true">⌕</span>
+          <input type="text" id="globalSearch" placeholder="Search quests, resources, topics…" aria-label="Search quests and resources">
+        </div>
+        <span class="school-pill" id="schoolPill">🎓 School Mode active</span>
+        <div class="topbar-actions">
+          <button class="iconbtn" id="themeToggle" title="Toggle dark / light mode" aria-label="Toggle dark or light mode">◐</button>
+          <button class="iconbtn" id="quickMistake" title="Open Mistake Bank" aria-label="Open Mistake Bank">✎</button>
+        </div>
+      </div>
+
+      <!-- ============ COMMAND CENTER ============ -->
+      <section class="view active" id="view-home" data-title="Command Center">
+        <div class="hero">
+          <div class="kicker">IFT UNILORIN · HUAWEI ICT COMPETITION 2026–2027 · PRACTICE TEAM</div>
+          <h1>Mission Control for the Practice Team</h1>
+          <p class="lede">Train. Build. Troubleshoot. Compete. A 16–20 week runway from baseline to competition-ready, built around University of Ilorin's academic calendar — not against it.</p>
+          <div class="hero-actions">
+            <button class="btn primary" data-nav-to="view-quests">Start Today's Quest</button>
+            <button class="btn" data-nav-to="view-roadmap">View Roadmap</button>
+            <button class="btn ghost" data-nav-to="view-resources">Open Huawei Resources</button>
+            <button class="btn ghost" data-nav-to="view-team">Take Baseline Test</button>
+            <button class="btn ghost" data-nav-to="view-radar">Competition Radar</button>
+          </div>
+        </div>
+
+        <div class="grid cols-4" id="homeStats" style="margin-bottom:18px;"></div>
+
+        <div class="grid cols-2">
+          <div class="panel">
+            <h3>Current phase <span class="badge" id="phaseBadge"></span></h3>
+            <p class="desc" id="phaseDesc" style="font-size:13.5px; color:var(--text-dim);"></p>
+            <div class="bar"><span id="phaseBar" style="width:0%"></span></div>
+          </div>
+          <div class="panel">
+            <h3>This week's cadence</h3>
+            <div id="cadenceMini" style="font-size:13px;"></div>
+          </div>
+        </div>
+
+        <div class="grid cols-2" style="margin-top:16px;">
+          <div class="panel">
+            <h3>Team readiness snapshot</h3>
+            <div id="readinessSnapshot"></div>
+          </div>
+          <div class="panel">
+            <h3>Next up</h3>
+            <div id="nextUp" style="font-size:13.5px; color:var(--text-dim);"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ ROADMAP ============ -->
+      <section class="view" id="view-roadmap" data-title="Roadmap">
+        <div class="view-head">
+          <div class="eyebrow">PHASES 0–8</div>
+          <h2>Roadmap</h2>
+          <p class="desc">The full preparation arc, phase by phase. Each phase unlocks a batch of quests. Dates are editable in Settings.</p>
+        </div>
+        <div id="roadmapList" class="grid cols-2"></div>
+
+        <div class="panel" style="margin-top:20px;">
+          <h3>Weekly cadence template <span class="badge">editable</span></h3>
+          <p class="desc" style="font-size:13px;">Reusable weekly rhythm. Adjust any day to match your team's real week.</p>
+          <div class="table-wrap"><table id="cadenceTable"></table></div>
+        </div>
+      </section>
+
+      <!-- ============ QUESTS ============ -->
+      <section class="view" id="view-quests" data-title="Quests">
+        <div class="view-head">
+          <div class="eyebrow">QUEST SYSTEM</div>
+          <h2>Quests</h2>
+          <p class="desc">14 quests carrying you from "what is this competition" to full team simulation. XP is motivation only — competence is the real score.</p>
+        </div>
+        <div class="filter-row" id="questFilters"></div>
+        <div class="grid cols-3" id="questGrid"></div>
+      </section>
+
+      <!-- ============ NETWORK / CLOUD / COMPUTING / CYBERSECURITY (track views share renderer) ============ -->
+      <section class="view" id="view-network" data-title="Network"></section>
+      <section class="view" id="view-cloud" data-title="Cloud"></section>
+      <section class="view" id="view-computing" data-title="Computing"></section>
+      <section class="view" id="view-security" data-title="Cybersecurity"></section>
+
+      <!-- ============ LABS ============ -->
+      <section class="view" id="view-labs" data-title="Labs">
+        <div class="view-head">
+          <div class="eyebrow">PHASE 7 · PRACTICAL LAB TRAINING</div>
+          <h2>Labs</h2>
+          <p class="desc">The goal isn't "I know the command" — it's "I can diagnose the problem under time pressure." Progress through five escalating levels.</p>
+        </div>
+        <div class="grid cols-3" id="labGrid"></div>
+        <div class="callout info" style="margin-top:16px;">No proprietary software required to start: eNSP/Huawei Cloud labs are supplemented with browser-accessible alternatives and written scenarios where tools aren't installed yet.</div>
+      </section>
+
+      <!-- ============ MOCK EXAMS ============ -->
+      <section class="view" id="view-mocks" data-title="Mock Exams">
+        <div class="view-head">
+          <div class="eyebrow">PHASE 8 · MOCK COMPETITION</div>
+          <h2>Mock Exams</h2>
+          <p class="desc">Five escalating simulations. Record score, time, accuracy and weaknesses after each attempt — this is what your readiness % is built from.</p>
+        </div>
+        <div class="panel" style="margin-bottom:16px;">
+          <h3>Readiness <span class="badge" id="readinessBadge">—</span></h3>
+          <div class="bar"><span id="readinessBar" style="width:0%"></span></div>
+        </div>
+        <div class="table-wrap"><table id="mockTable"></table></div>
+      </section>
+
+      <!-- ============ MISTAKE BANK ============ -->
+      <section class="view" id="view-mistakes" data-title="Mistake Bank">
+        <div class="view-head">
+          <div class="eyebrow">PHASE 6 · EXAM INTELLIGENCE</div>
+          <h2>Mistake Bank</h2>
+          <p class="desc">Every missed question earns an entry: what went wrong, the correct concept, the source, and a retest date. This is your highest-leverage revision tool.</p>
+        </div>
+        <div class="panel" style="margin-bottom:16px;">
+          <h3>Log a mistake</h3>
+          <form id="mistakeForm" class="grid cols-2" style="align-items:end;">
+            <div><label class="flabel" for="mTopic">Topic</label><input class="field-input" id="mTopic" required placeholder="e.g. VLSM subnetting"></div>
+            <div><label class="flabel" for="mSource">Source used</label><input class="field-input" id="mSource" placeholder="e.g. Huawei Learning Space, Module 3"></div>
+            <div style="grid-column:1/-1;"><label class="flabel" for="mWhy">Why I got it wrong</label><textarea class="field-input" id="mWhy" rows="2" required></textarea></div>
+            <div style="grid-column:1/-1;"><label class="flabel" for="mCorrect">Correct concept</label><textarea class="field-input" id="mCorrect" rows="2" required></textarea></div>
+            <div><label class="flabel" for="mRetest">Re-test date</label><input class="field-input" id="mRetest" type="date"></div>
+            <div><button class="btn primary" type="submit">Add to Mistake Bank</button></div>
+          </form>
+        </div>
+        <div class="table-wrap"><table id="mistakeTable"></table></div>
+      </section>
+
+      <!-- ============ RESOURCES ============ -->
+      <section class="view" id="view-resources" data-title="Resources">
+        <div class="view-head">
+          <div class="eyebrow">RESOURCE LIBRARY</div>
+          <h2>Resources</h2>
+          <p class="desc">Curated, not exhaustive. Official Huawei sources first, then vetted supplements. Every external link opens in a new tab.</p>
+        </div>
+        <div class="filter-row" id="resourceFilters">
+          <div class="mini-search"><span aria-hidden="true">⌕</span><input type="text" id="resourceSearch" placeholder="Search resources"></div>
+        </div>
+        <div class="grid cols-3" id="resourceGrid"></div>
+      </section>
+
+      <!-- ============ COMPETITION RADAR ============ -->
+      <section class="view" id="view-radar" data-title="Competition Radar">
+        <div class="view-head">
+          <div class="eyebrow">COMPETITION RADAR</div>
+          <h2>Competition Radar</h2>
+          <p class="desc">Status, confirmed vs. unconfirmed information, and where to verify it yourself. Nothing here is guessed.</p>
+        </div>
+        <div id="radarContent"></div>
+      </section>
+
+      <!-- ============ TEAM ============ -->
+      <section class="view" id="view-team" data-title="Team">
+        <div class="view-head">
+          <div class="eyebrow">TEAM OVERVIEW</div>
+          <h2>Team</h2>
+          <p class="desc">10-person practice pool — a talent pool, not the final competition team. Cross-training is encouraged in weeks 1–4.</p>
+        </div>
+        <div class="grid cols-4" id="teamStats" style="margin-bottom:18px;"></div>
+        <div class="grid cols-3" id="teamGrid"></div>
+        <div style="margin-top:14px;"><button class="btn" id="addMemberBtn">+ Add member</button></div>
+      </section>
+
+      <!-- ============ TEAM LEAD CONSOLE ============ -->
+      <section class="view" id="view-console" data-title="Team Lead Console">
+        <div class="view-head">
+          <div class="eyebrow">FOR THE TEAM LEAD</div>
+          <h2>Team Lead Console</h2>
+          <p class="desc">Weekly objectives, meeting template, action items and a running decision log.</p>
+        </div>
+        <div class="grid cols-2">
+          <div class="panel">
+            <h3>This week's objectives</h3>
+            <div id="objectivesList"></div>
+            <form id="objectiveForm" style="display:flex; gap:8px; margin-top:10px;">
+              <input class="field-input" id="objectiveInput" placeholder="Add an objective…" style="flex:1;">
+              <button class="btn sm" type="submit">Add</button>
+            </form>
+          </div>
+          <div class="panel">
+            <h3>Meeting agenda template</h3>
+            <ol style="padding-left:18px; font-size:13.5px; color:var(--text-dim);">
+              <li>Wins</li><li>Problems</li><li>Technical topic</li><li>Lab review</li>
+              <li>Weak areas</li><li>Next week's quest</li><li>Assignments</li><li>Questions</li>
+            </ol>
+          </div>
+        </div>
+        <div class="grid cols-2" style="margin-top:16px;">
+          <div class="panel">
+            <h3>Action items</h3>
+            <div id="actionList"></div>
+            <form id="actionForm" style="display:flex; gap:8px; margin-top:10px;">
+              <input class="field-input" id="actionInput" placeholder="New action item…" style="flex:1;">
+              <button class="btn sm" type="submit">Add</button>
+            </form>
+          </div>
+          <div class="panel">
+            <h3>Decision log</h3>
+            <div id="decisionList"></div>
+            <form id="decisionForm" style="display:flex; gap:8px; margin-top:10px;">
+              <input class="field-input" id="decisionInput" placeholder="Log a decision…" style="flex:1;">
+              <button class="btn sm" type="submit">Add</button>
+            </form>
+          </div>
+        </div>
+        <div class="panel" style="margin-top:16px;">
+          <h3>Team notes</h3>
+          <textarea class="field-input" id="teamNotes" rows="4" placeholder="Free-form notes for the team lead…"></textarea>
+        </div>
+      </section>
+
+      <!-- ============ SETTINGS ============ -->
+      <section class="view" id="view-settings" data-title="Settings">
+        <div class="view-head">
+          <div class="eyebrow">SETTINGS</div>
+          <h2>Settings</h2>
+          <p class="desc">Edit key dates, toggle School Mode, and back up your team's data.</p>
+        </div>
+        <div class="grid cols-2">
+          <div class="panel">
+            <h3>Key dates</h3>
+            <label class="flabel" for="setResume">School resumption date</label>
+            <input class="field-input" id="setResume" type="date" style="margin-bottom:12px;">
+            <label class="flabel" for="setVerified">Competition info last verified</label>
+            <input class="field-input" id="setVerified" type="date">
+          </div>
+          <div class="panel">
+            <h3>School Mode</h3>
+            <p style="font-size:13.5px; color:var(--text-dim);">When enabled, the dashboard nudges toward 30–60 min micro-sessions and protects academics.</p>
+            <label style="display:flex; align-items:center; gap:10px; font-size:13.5px;">
+              <input type="checkbox" id="schoolModeToggle"> Enable School Mode
+            </label>
+            <div class="callout" style="margin-top:12px;">The competition must strengthen your academic development, not destroy it.</div>
+          </div>
+        </div>
+        <div class="panel" style="margin-top:16px;">
+          <h3>Data</h3>
+          <p style="font-size:13.5px; color:var(--text-dim);">All data lives only in this browser (localStorage). Export regularly, especially before clearing browser data.</p>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn" id="exportBtn">Export backup (.json)</button>
+            <label class="btn" style="margin:0;">Import backup <input type="file" id="importInput" accept="application/json" style="display:none;"></label>
+            <button class="btn ghost" id="resetBtn" style="color:var(--red); border-color:var(--red);">Reset all data</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+    <footer class="app-foot">IFT UNILORIN · Huawei ICT Competition 2026–2027 Practice Team · Internal preparation tool, not an official Huawei product · Data stored locally in your browser only</footer>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="questModalBackdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="qModalTitle" id="questModal"></div>
+</div>
+
+<script>
+/* ============================================================
+   DATA MODEL — edit seed content here
+   ============================================================ */
+const STORAGE_KEY = 'ift_huawei_dashboard_v1';
+
+function defaultState(){
+  return {
+    settings:{
+      theme:'dark',
+      schoolMode:false,
+      schoolResumeDate: addDays(new Date('2026-09-11'), 28).toISOString().slice(0,10),
+      lastVerified: '2026-09-11'
+    },
+    cadence:{
+      Monday:'Concept learning', Tuesday:'Concept + quiz', Wednesday:'Lab',
+      Thursday:'Revision', Friday:'Light study / video / ecosystem update',
+      Saturday:'Deep technical session / mock', Sunday:'Rest + weekly review'
+    },
+    quests: seedQuests(),
+    labs: [
+      {level:1, name:'Basic configuration', status:'Available', notes:''},
+      {level:2, name:'Multi-device configuration', status:'Locked', notes:''},
+      {level:3, name:'Troubleshooting', status:'Locked', notes:''},
+      {level:4, name:'Timed scenario', status:'Locked', notes:''},
+      {level:5, name:'Competition simulation', status:'Locked', notes:''}
+    ],
+    mocks: [
+      {id:'m1', name:'Mock 1 — Foundation', score:'', time:'', accuracy:'', unanswered:'', weaknesses:''},
+      {id:'m2', name:'Mock 2 — Intermediate', score:'', time:'', accuracy:'', unanswered:'', weaknesses:''},
+      {id:'m3', name:'Mock 3 — National-style', score:'', time:'', accuracy:'', unanswered:'', weaknesses:''},
+      {id:'m4', name:'Mock 4 — Advanced', score:'', time:'', accuracy:'', unanswered:'', weaknesses:''},
+      {id:'m5', name:'Mock 5 — Full competition simulation', score:'', time:'', accuracy:'', unanswered:'', weaknesses:''}
+    ],
+    mistakes: [],
+    resources: seedResources(),
+    members: seedMembers(),
+    console:{
+      objectives:['Finish Phase 0 baseline assessments','Get every member a Huawei Talent account'],
+      actions:[], decisions:[], notes:''
+    }
+  };
+}
+
+function seedQuests(){
+  const R = (t,u)=>({title:t,url:u});
+  return [
+    {id:'q01', code:'QUEST 01', title:'Decode the Competition', phase:'Phase 0 — Orientation', track:'cross',
+      objective:'Understand the Huawei ICT Competition structure, stages and Practice tracks.', est:'2–3 hrs', diff:'Foundation', status:'Available',
+      prereqs:'None', practical:'Create/verify a Huawei Talent account; explore the official Learning Space; write a 1-page summary of the 4 competition stages.',
+      deliverable:'"Competition Readiness Profile" document + Huawei Talent account screenshot.',
+      resources:[R('Huawei Talent Portal (account + registration)','https://e.huawei.com/en/talent/portal/#/'), R('Huawei ICT Competition Learning Space','https://talent.shixizhi.huawei.com/center/privateCenter.htm'), R('Huawei ICT Academy','https://e.huawei.com/en/talent/ict-academy')],
+      checks:['What are the 4 Practice Competition stages in order?','Which stages are theory vs. lab-based?','What are the current Practice tracks?'], evidence:''},
+    {id:'q02', code:'QUEST 02', title:'Think Like a Network', phase:'Phase 1 — Networking Foundations', track:'network',
+      objective:'Master OSI/TCP-IP models and how data actually flows through a network.', est:'4–6 hrs', diff:'Foundation', status:'Available',
+      prereqs:'Quest 01', practical:'Trace a single HTTP request through all 7 OSI layers on paper; diagram encapsulation/decapsulation.',
+      deliverable:'Hand-drawn or digital OSI/TCP-IP packet-flow diagram with your own annotations.',
+      resources:[R('Huawei ICT Academy learning material','https://e.huawei.com/en/talent/ict-academy'), R('Search: OSI model explained (YouTube)','https://www.youtube.com/results?search_query=OSI+model+explained+networking')],
+      checks:['At which layer does a switch operate vs. a router?','What changes at each layer during encapsulation?','What is the difference between a segment, packet and frame?'], evidence:''},
+    {id:'q03', code:'QUEST 03', title:'Subnetting Under Fire', phase:'Phase 1 — Networking Foundations', track:'network',
+      objective:'Solve IPv4 subnetting and CIDR problems quickly and correctly.', est:'5–7 hrs', diff:'Intermediate', status:'Available',
+      prereqs:'Quest 02', practical:'30-minute timed subnetting drill (10 problems); repeat until under 90 seconds/problem with 100% accuracy.',
+      deliverable:'Completed timed drill sheet with self-graded score.',
+      resources:[R('Search: subnetting practice drills','https://www.youtube.com/results?search_query=subnetting+practice+drills+CIDR'), R('Huawei Learning Space (Network track)','https://talent.shixizhi.huawei.com/center/privateCenter.htm')],
+      checks:['Subnet a /24 into 8 equal subnets — what is the new mask?','How many usable hosts in a /27?','What is CIDR notation for 255.255.255.192?'], evidence:''},
+    {id:'q04', code:'QUEST 04', title:'Build the LAN', phase:'Phase 2 — Huawei Network Track', track:'network',
+      objective:'Configure VLANs, trunk/access ports and basic switching.', est:'4–5 hrs', diff:'Intermediate', status:'Locked',
+      prereqs:'Quest 03', practical:'Lab: build a 2-switch topology with 2 VLANs and a trunk link; verify inter-VLAN isolation.',
+      deliverable:'Lab writeup: topology, configs, verification output, reflection.',
+      resources:[R('Huawei ICT Academy — Network track','https://e.huawei.com/en/talent/ict-academy'), R('Search: Huawei VRP VLAN configuration','https://www.youtube.com/results?search_query=Huawei+VRP+VLAN+configuration')],
+      checks:['What is the difference between an access port and a trunk port?','Why do VLANs need a router or L3 switch to communicate?'], evidence:''},
+    {id:'q05', code:'QUEST 05', title:'Route the World', phase:'Phase 2 — Huawei Network Track', track:'network',
+      objective:'Master static routing and OSPF fundamentals.', est:'5–6 hrs', diff:'Intermediate', status:'Locked',
+      prereqs:'Quest 04', practical:'Configure static routes between 3 routers; then replace with single-area OSPF and compare convergence.',
+      deliverable:'Before/after routing table captures + short comparison note.',
+      resources:[R('Search: OSPF fundamentals Huawei VRP','https://www.youtube.com/results?search_query=OSPF+fundamentals+Huawei+VRP'), R('Huawei Learning Space','https://talent.shixizhi.huawei.com/center/privateCenter.htm')],
+      checks:['What metric does OSPF use by default?','When would you prefer static routing over OSPF?'], evidence:''},
+    {id:'q06', code:'QUEST 06', title:'Secure the Network', phase:'Phase 5 — Cybersecurity for Competitors', track:'security',
+      objective:'Apply ACLs, segmentation and core security principles to a real topology.', est:'3–4 hrs', diff:'Intermediate', status:'Locked',
+      prereqs:'Quest 05', practical:'Write and apply an ACL restricting one VLAN from reaching another; test and document results.',
+      deliverable:'ACL config + test evidence (allowed/denied traffic).',
+      resources:[R('Search: ACL configuration basics networking','https://www.youtube.com/results?search_query=ACL+configuration+basics+networking'), R('Huawei ICT Academy','https://e.huawei.com/en/talent/ict-academy')],
+      checks:['What is the difference between a standard and extended ACL?','Where should you place an ACL for efficiency?'], evidence:''},
+    {id:'q07', code:'QUEST 07', title:'Huawei VRP', phase:'Phase 2 — Huawei Network Track', track:'network',
+      objective:'Get fluent navigating Huawei VRP CLI: modes, interfaces, save/verify workflow.', est:'3–4 hrs', diff:'Intermediate', status:'Locked',
+      prereqs:'Quest 04', practical:'Complete a checklist of 15 core VRP commands from memory, then verify against documentation.',
+      deliverable:'Self-scored VRP command checklist.',
+      resources:[R('Huawei ICT Academy — Network track','https://e.huawei.com/en/talent/ict-academy'), R('Search: Huawei VRP CLI basics','https://www.youtube.com/results?search_query=Huawei+VRP+CLI+basics')],
+      checks:['How do you move from user view to system view in VRP?','What command saves the running configuration?'], evidence:''},
+    {id:'q08', code:'QUEST 08', title:'Cloud Native', phase:'Phase 3 — Cloud Fundamentals', track:'cloud',
+      objective:'Understand cloud architecture (IaaS/PaaS/SaaS) and Huawei Cloud basics.', est:'4–5 hrs', diff:'Intermediate', status:'Locked',
+      prereqs:'Quest 01', practical:'Map 5 real services (e.g. a VM, a managed DB, a serverless function) to IaaS/PaaS/SaaS with justification.',
+      deliverable:'One-page cloud service classification table.',
+      resources:[R('Huawei Cloud','https://www.huaweicloud.com/intl/en-us/'), R('Huawei Cloud documentation','https://support.huaweicloud.com/intl/en-us/')],
+      checks:['What distinguishes PaaS from IaaS?','What does elasticity mean in a cloud context?'], evidence:''},
+    {id:'q09', code:'QUEST 09', title:'Compute', phase:'Phase 4 — Computing Foundations', track:'computing',
+      objective:'Build Linux command-line fluency and get familiar with openEuler/openGauss/Kunpeng.', est:'5–6 hrs', diff:'Intermediate', status:'Locked',
+      prereqs:'Quest 01', practical:'Complete 20 core Linux CLI tasks (navigation, permissions, processes, package management) in a browser-based or local Linux shell.',
+      deliverable:'Terminal transcript or screenshots of completed tasks.',
+      resources:[R('openEuler','https://www.openeuler.org/en/'), R('openGauss','https://opengauss.org/en/'), R('Kunpeng','https://www.hikunpeng.com/en')],
+      checks:['What does chmod 755 grant to owner/group/others?','How do you check running processes in Linux?'], evidence:''},
+    {id:'q10', code:'QUEST 10', title:'Break It', phase:'Phase 7 — Practical Lab Training', track:'network',
+      objective:'Diagnose deliberately broken network scenarios under time pressure.', est:'2 hrs', diff:'Competition', status:'Locked',
+      prereqs:'Quest 05, Quest 06', practical:'Given a broken topology (bad VLAN, wrong mask, missing route), find and fix the fault in under 30 minutes.',
+      deliverable:'Fault log: symptom → diagnosis steps → fix → verification.',
+      resources:[R('Huawei Learning Space','https://talent.shixizhi.huawei.com/center/privateCenter.htm')],
+      checks:['What is your systematic troubleshooting order (physical → data link → network → …)?'], evidence:''},
+    {id:'q11', code:'QUEST 11', title:'Speed Run', phase:'Phase 6 — Huawei Exam Intelligence', track:'cross',
+      objective:'Answer a timed mixed-technical quiz under exam pressure.', est:'45 min', diff:'Competition', status:'Locked',
+      prereqs:'Quests 02–09', practical:'45-minute mixed networking/cloud/computing quiz, no external help.',
+      deliverable:'Score, time, and 3 logged mistakes in the Mistake Bank.',
+      resources:[], checks:['Where did time pressure cause errors you would not normally make?'], evidence:''},
+    {id:'q12', code:'QUEST 12', title:'Mock National', phase:'Phase 8 — Mock Competition', track:'cross',
+      objective:'Simulate a National-style theory exam end to end.', est:'2 hrs', diff:'Competition', status:'Locked',
+      prereqs:'Quest 11', practical:'Full Mock 3 attempt (see Mock Exams). Log results and top 3 weak topics.',
+      deliverable:'Completed Mock 3 entry with weaknesses documented.',
+      resources:[], checks:['What is your current readiness percentage?'], evidence:''},
+    {id:'q13', code:'QUEST 13', title:'Lab Boss', phase:'Phase 7 — Practical Lab Training', track:'network',
+      objective:'Complete a timed scenario-based practical lab (Lab Level 4).', est:'90 min', diff:'Advanced', status:'Locked',
+      prereqs:'Quest 10', practical:'Timed multi-device configuration + troubleshooting scenario under a 90-minute clock.',
+      deliverable:'Full lab writeup with time log.',
+      resources:[], checks:['Which step consumed the most time, and why?'], evidence:''},
+    {id:'q14', code:'QUEST 14', title:'Competition Mode', phase:'Phase 8 — Mock Competition', track:'cross',
+      objective:'Run a full team simulation: theory + lab + teamwork, mirroring the real event.', est:'Half day', diff:'Advanced', status:'Locked',
+      prereqs:'Quest 12, Quest 13', practical:'Full team mock combining a written round and a lab round with roles assigned as in competition.',
+      deliverable:'Team after-action report: score, time, teamwork issues, next actions.',
+      resources:[], checks:['What would the team do differently in a real Regional/Global lab round?'], evidence:''}
+  ];
+}
+
+function seedResources(){
+  return [
+    {t:'Huawei ICT Competition — official page', p:'Huawei', type:'Official Huawei', track:'cross', diff:'Foundation', why:'The authoritative source for competition structure and updates.', url:'https://e.huawei.com/en/talent/ict-academy/ict-competition'},
+    {t:'Huawei ICT Competition Learning Space', p:'Huawei', type:'Official Huawei', track:'cross', diff:'Foundation', why:'Where enrolled participants access track-specific study material.', url:'https://talent.shixizhi.huawei.com/center/privateCenter.htm'},
+    {t:'Huawei Talent Portal', p:'Huawei', type:'Official Huawei', track:'cross', diff:'Foundation', why:'Account creation and competition registration.', url:'https://e.huawei.com/en/talent/portal/#/'},
+    {t:'Huawei ICT Academy', p:'Huawei', type:'Official Huawei', track:'cross', diff:'Foundation', why:'University partnership program with course material and certification pathways.', url:'https://e.huawei.com/en/talent/ict-academy'},
+    {t:'Huawei Talent — home', p:'Huawei', type:'Official Huawei', track:'cross', diff:'Foundation', why:'Entry point to all Huawei talent and academy programs.', url:'https://e.huawei.com/en/talent/'},
+    {t:'Huawei.com — corporate site', p:'Huawei', type:'Official Huawei', track:'cross', diff:'Foundation', why:'Company-wide announcements, including competition news.', url:'https://www.huawei.com/'},
+    {t:'10th Huawei ICT Competition Global Final recap', p:'Huawei Newsroom', type:'Reference', track:'cross', diff:'Foundation', why:'Historical reference: how the most recent (2025–2026) cycle concluded — read as context, not current-cycle fact.', url:'https://www.huawei.com/en/news/2026/6/ict-competition-global'},
+    {t:'Huawei ICT Competition 2025–2026 Global Final minisite', p:'Huawei', type:'Reference', track:'cross', diff:'Foundation', why:'Historical reference for the previous cycle; confirms the 2026–2027 cycle is now underway.', url:'https://www.huawei.com/minisite/ict-competition-2025-2026-global/en/index.html'},
+    {t:'Subnetting practice drills', p:'YouTube search', type:'YouTube', track:'network', diff:'Foundation', why:'Timed drill practice builds subnetting speed for Quest 03.', url:'https://www.youtube.com/results?search_query=subnetting+practice+drills+CIDR'},
+    {t:'OSI model explained', p:'YouTube search', type:'YouTube', track:'network', diff:'Foundation', why:'Solid conceptual grounding before Huawei-specific network content.', url:'https://www.youtube.com/results?search_query=OSI+model+explained+networking'},
+    {t:'Huawei VRP CLI basics', p:'YouTube search', type:'YouTube', track:'network', diff:'Intermediate', why:'Huawei-specific CLI habits differ from Cisco IOS — worth dedicated practice.', url:'https://www.youtube.com/results?search_query=Huawei+VRP+CLI+basics'},
+    {t:'OSPF fundamentals (Huawei VRP)', p:'YouTube search', type:'YouTube', track:'network', diff:'Intermediate', why:'Supports Quest 05 routing practicals.', url:'https://www.youtube.com/results?search_query=OSPF+fundamentals+Huawei+VRP'},
+    {t:'Huawei VLAN configuration (VRP)', p:'YouTube search', type:'YouTube', track:'network', diff:'Intermediate', why:'Directly supports the Quest 04 LAN build.', url:'https://www.youtube.com/results?search_query=Huawei+VRP+VLAN+configuration'},
+    {t:'ACL configuration basics', p:'YouTube search', type:'YouTube', track:'security', diff:'Intermediate', why:'Foundational for the Quest 06 security lab.', url:'https://www.youtube.com/results?search_query=ACL+configuration+basics+networking'},
+    {t:'Huawei Cloud', p:'Huawei Cloud', type:'Cloud', track:'cloud', diff:'Foundation', why:'Official platform used in Cloud/Computing lab-stage competition rounds.', url:'https://www.huaweicloud.com/intl/en-us/'},
+    {t:'Huawei Cloud documentation', p:'Huawei Cloud', type:'Cloud', track:'cloud', diff:'Intermediate', why:'Reference docs for services referenced in Quest 08.', url:'https://support.huaweicloud.com/intl/en-us/'},
+    {t:'openEuler', p:'openEuler community', type:'Computing', track:'computing', diff:'Intermediate', why:'The Linux distribution used in Huawei Computing-track material.', url:'https://www.openeuler.org/en/'},
+    {t:'openGauss', p:'openGauss community', type:'Computing', track:'computing', diff:'Intermediate', why:'Huawei-backed database referenced in the Computing track outline.', url:'https://opengauss.org/en/'},
+    {t:'Kunpeng', p:'Huawei', type:'Computing', track:'computing', diff:'Intermediate', why:'Processor architecture concepts referenced in the Computing track.', url:'https://www.hikunpeng.com/en'},
+    {t:'Huawei ICT Competition — 2026-2027 tag search', p:'Search', type:'Past Questions', track:'cross', diff:'Foundation', why:'Use to pull the latest public commentary and student write-ups on the current cycle.', url:'https://www.youtube.com/results?search_query=Huawei+ICT+Competition+2026+2027'},
+    {t:'Huawei eNSP search', p:'Search', type:'Labs', track:'network', diff:'Intermediate', why:'eNSP was the Network-track practical tool in the 2025–2026 cycle; confirm current tool via the Learning Space before installing.', url:'https://www.youtube.com/results?search_query=Huawei+eNSP+tutorial'},
+    {t:'Huawei network troubleshooting', p:'Search', type:'Network', track:'network', diff:'Competition', why:'Supports Quest 10 (Break It) troubleshooting drills.', url:'https://www.youtube.com/results?search_query=Huawei+network+troubleshooting'},
+    {t:'Wikipedia — Huawei ICT Competition', p:'Wikipedia', type:'Reference', track:'cross', diff:'Foundation', why:'Independent, neutral overview and history of the competition.', url:'https://en.wikipedia.org/wiki/Huawei_ICT_Competition'}
+  ];
+}
+
+function seedMembers(){
+  const names = ['Member 1 (Team Lead)','Member 2','Member 3','Member 4','Member 5','Member 6','Member 7','Member 8','Member 9','Member 10'];
+  return names.map((n,i)=>({
+    id:'mem'+(i+1), name:n, track: i%2===0 ? 'Network' : 'Cloud/Computing',
+    baseline:{networking:'',computing:'',cloud:'',security:'',problem:'',practical:'',discipline:''},
+    current:'', quests:0, labScore:'', mockScore:'', confidence:'', attendance:'', weak:''
+  }));
+}
+
+function addDays(date,n){ const d=new Date(date); d.setDate(d.getDate()+n); return d; }
+function uid(p){ return p+'_'+Math.random().toString(36).slice(2,9); }
+
+/* ============================================================
+   STATE
+   ============================================================ */
+let state = loadState();
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return defaultState();
+    const parsed = JSON.parse(raw);
+    const def = defaultState();
+    // shallow-merge, but keep saved arrays if present
+    return Object.assign({}, def, parsed, {
+      quests: parsed.quests && parsed.quests.length ? parsed.quests : def.quests,
+      resources: parsed.resources && parsed.resources.length ? parsed.resources : def.resources,
+      members: parsed.members && parsed.members.length ? parsed.members : def.members,
+      labs: parsed.labs && parsed.labs.length ? parsed.labs : def.labs,
+      mocks: parsed.mocks && parsed.mocks.length ? parsed.mocks : def.mocks,
+      settings: Object.assign({}, def.settings, parsed.settings||{}),
+      cadence: Object.assign({}, def.cadence, parsed.cadence||{}),
+      console: Object.assign({}, def.console, parsed.console||{})
+    });
+  }catch(e){ console.warn('Failed to load saved data, using defaults.', e); return defaultState(); }
+}
+function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+const NAV = [
+  {id:'view-home', label:'Command Center', ico:'◆'},
+  {id:'view-roadmap', label:'Roadmap', ico:'▤'},
+  {id:'view-quests', label:'Quests', ico:'✦'},
+  {id:'view-network', label:'Network', ico:'⇄'},
+  {id:'view-cloud', label:'Cloud', ico:'☁'},
+  {id:'view-computing', label:'Computing', ico:'▣'},
+  {id:'view-security', label:'Cybersecurity', ico:'⛨'},
+  {id:'view-labs', label:'Labs', ico:'⚙'},
+  {id:'view-mocks', label:'Mock Exams', ico:'⏱'},
+  {id:'view-mistakes', label:'Mistake Bank', ico:'✎'},
+  {id:'view-resources', label:'Resources', ico:'▥'},
+  {id:'view-radar', label:'Competition Radar', ico:'◎'},
+  {id:'view-team', label:'Team', ico:'◈'},
+  {id:'view-console', label:'Team Lead Console', ico:'☰'},
+  {id:'view-settings', label:'Settings', ico:'⚑'}
+];
+
+function buildNav(){
+  const list = document.getElementById('navlist');
+  list.innerHTML = NAV.map(n=>`<li><button class="navbtn" data-view="${n.id}"><span class="ico">${n.ico}</span>${n.label}</button></li>`).join('');
+  list.addEventListener('click', e=>{
+    const btn = e.target.closest('.navbtn');
+    if(!btn) return;
+    showView(btn.dataset.view);
+    closeSidebar();
+  });
+}
+
+function showView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active', v.id===id));
+  document.querySelectorAll('.navbtn').forEach(b=>{
+    const active = b.dataset.view===id;
+    b.toggleAttribute('aria-current', active);
+    if(active) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current');
+  });
+  const titleEl = document.querySelector('.mobile-title');
+  const meta = NAV.find(n=>n.id===id);
+  if(titleEl && meta) titleEl.innerHTML = meta.label + '<span>IFT UNILORIN · Huawei ICT 2026–2027</span>';
+  window.scrollTo({top:0, behavior:'auto'});
+  if(id==='view-network'||id==='view-cloud'||id==='view-computing'||id==='view-security') renderTrackView(id);
+}
+document.addEventListener('click', e=>{
+  const jump = e.target.closest('[data-nav-to]');
+  if(jump){ showView(jump.dataset.navTo); }
+});
+
+/* Mobile sidebar */
+const sidebar = document.getElementById('sidebar');
+const scrim = document.getElementById('scrim');
+document.getElementById('hamburgerBtn').addEventListener('click', ()=>{
+  sidebar.classList.add('open'); scrim.classList.add('open');
+  document.getElementById('hamburgerBtn').setAttribute('aria-expanded','true');
+});
+function closeSidebar(){
+  sidebar.classList.remove('open'); scrim.classList.remove('open');
+  document.getElementById('hamburgerBtn').setAttribute('aria-expanded','false');
+}
+scrim.addEventListener('click', closeSidebar);
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeSidebar(); closeQuestModal(); } });
+
+/* ============================================================
+   THEME
+   ============================================================ */
+function applyTheme(){
+  document.documentElement.setAttribute('data-theme', state.settings.theme);
+  document.getElementById('themeToggle').textContent = state.settings.theme==='dark' ? '◐' : '◑';
+}
+document.getElementById('themeToggle').addEventListener('click', ()=>{
+  state.settings.theme = state.settings.theme==='dark' ? 'light' : 'dark';
+  applyTheme(); save();
+});
+
+/* ============================================================
+   PHASE / TIME HELPERS
+   ============================================================ */
+const PHASES = [
+  {id:0, name:'Phase 0 — Orientation & Setup', weeks:'Week 1'},
+  {id:1, name:'Phase 1 — Networking Foundations', weeks:'Weeks 1–3'},
+  {id:2, name:'Phase 2 — Huawei Network Track', weeks:'Weeks 3–6'},
+  {id:3, name:'Phase 3 — Cloud Fundamentals', weeks:'Weeks 5–8'},
+  {id:4, name:'Phase 4 — Computing Foundations', weeks:'Weeks 7–10'},
+  {id:5, name:'Phase 5 — Cybersecurity for Competitors', weeks:'Woven through Phases 1–4'},
+  {id:6, name:'Phase 6 — Huawei Exam Intelligence', weeks:'Week 8 onward'},
+  {id:7, name:'Phase 7 — Practical Lab Training', weeks:'Week 9 onward'},
+  {id:8, name:'Phase 8 — Mock Competition', weeks:'Week 10 onward'}
+];
+
+function daysUntil(dateStr){
+  const target = new Date(dateStr+'T00:00:00');
+  const now = new Date('2026-09-11T00:00:00');
+  return Math.round((target-now)/86400000);
+}
+
+function currentPhaseIndex(){
+  const done = state.quests.filter(q=>q.status==='Completed').length;
+  if(done===0) return 0;
+  if(done<3) return 1;
+  if(done<6) return 2;
+  if(done<8) return 3;
+  if(done<9) return 4;
+  if(done<11) return 6;
+  if(done<13) return 7;
+  return 8;
+}
+
+/* ============================================================
+   RENDER: HOME
+   ============================================================ */
+function renderHome(){
+  const completed = state.quests.filter(q=>q.status==='Completed').length;
+  const total = state.quests.length;
+  const days = daysUntil(state.settings.schoolResumeDate);
+  const avgBaseline = teamAverage('baseline');
+
+  document.getElementById('homeStats').innerHTML = [
+    statCard('Days to school resumption', days>=0? days : 0, days>=0 ? 'until '+fmtDate(state.settings.schoolResumeDate) : 'already resumed'),
+    statCard('Quests completed', `${completed}/${total}`, Math.round(completed/total*100)+'% of roadmap'),
+    statCard('Team baseline avg', avgBaseline!==null ? avgBaseline+'%' : '—', avgBaseline!==null ? 'across scored members' : 'no scores yet'),
+    statCard('Current mode', state.settings.schoolMode ? 'School Mode' : 'Pre-school', state.settings.schoolMode ? '30–60 min sessions' : '60–120 min sessions')
+  ].join('');
+
+  const phase = PHASES[currentPhaseIndex()];
+  document.getElementById('phaseBadge').textContent = phase.weeks;
+  document.getElementById('phaseDesc').textContent = phase.name + '. Progress is driven by completed quests below.';
+  document.getElementById('phaseBar').style.width = Math.round(completed/total*100)+'%';
+
+  const cad = state.cadence;
+  document.getElementById('cadenceMini').innerHTML = Object.entries(cad).map(([d,a])=>
+    `<div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid var(--border-soft); font-size:13px;"><span class="mono" style="color:var(--text-faint);">${d}</span><span>${escapeHtml(a)}</span></div>`
+  ).join('');
+
+  const readiness = computeReadiness();
+  document.getElementById('readinessSnapshot').innerHTML = `
+    <div class="stat-num" style="color:var(--cyan);">${readiness}%</div>
+    <div class="stat-label" style="margin-bottom:10px;">Estimated readiness (mock exam average)</div>
+    <div class="bar"><span style="width:${readiness}%"></span></div>
+    <p style="font-size:12.5px; color:var(--text-faint); margin-top:10px;">${state.members.length} members in the practice pool · ${state.mistakes.length} mistakes logged</p>`;
+
+  const nextQuest = state.quests.find(q=>q.status==='Available') || state.quests.find(q=>q.status==='InProgress');
+  document.getElementById('nextUp').innerHTML = nextQuest
+    ? `<strong style="color:var(--text);">${nextQuest.code} — ${escapeHtml(nextQuest.title)}</strong><br>${escapeHtml(nextQuest.objective)}<div style="margin-top:10px;"><button class="btn sm primary" data-nav-to="view-quests">Open Quests</button></div>`
+    : `All visible quests are in progress or complete. Check the Roadmap for what unlocks next.`;
+}
+
+function statCard(label, num, sub){
+  return `<div class="panel"><div class="stat-num">${num}</div><div class="stat-label">${label}</div><div class="stat-sub">${sub}</div></div>`;
+}
+function fmtDate(str){
+  try{ return new Date(str+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}); }catch(e){ return str; }
+}
+function escapeHtml(s){ return (s||'').toString().replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function teamAverage(kind){
+  const weights = {networking:.25, computing:.15, cloud:.15, security:.10, problem:.15, practical:.10, discipline:.10};
+  const scores = state.members.map(m=>{
+    const b = m.baseline;
+    const vals = Object.keys(weights).map(k=>({v:parseFloat(b[k]), w:weights[k]})).filter(x=>!isNaN(x.v));
+    if(!vals.length) return null;
+    const totalW = vals.reduce((s,x)=>s+x.w,0);
+    return vals.reduce((s,x)=>s+x.v*x.w,0)/totalW;
+  }).filter(v=>v!==null);
+  if(!scores.length) return null;
+  return Math.round(scores.reduce((a,b)=>a+b,0)/scores.length);
+}
+
+function computeReadiness(){
+  const vals = state.mocks.map(m=>parseFloat(m.score)).filter(v=>!isNaN(v));
+  if(!vals.length) return 0;
+  return Math.round(vals.reduce((a,b)=>a+b,0)/vals.length);
+}
+
+/* ============================================================
+   RENDER: ROADMAP
+   ============================================================ */
+function renderRoadmap(){
+  document.getElementById('roadmapList').innerHTML = PHASES.map(p=>{
+    const relatedQuests = state.quests.filter(q=>q.phase.startsWith(p.name.split(' — ')[0]));
+    const done = relatedQuests.filter(q=>q.status==='Completed').length;
+    return `<div class="panel">
+      <h3>${p.name} <span class="badge">${p.weeks}</span></h3>
+      <p style="font-size:13px; color:var(--text-dim); margin-bottom:8px;">${relatedQuests.length} linked quest(s) · ${done} completed</p>
+      <div class="bar"><span style="width:${relatedQuests.length? Math.round(done/relatedQuests.length*100):0}%"></span></div>
+    </div>`;
+  }).join('');
+
+  const table = document.getElementById('cadenceTable');
+  const days = Object.keys(state.cadence);
+  table.innerHTML = `<thead><tr><th>Day</th><th>Focus</th></tr></thead><tbody>${
+    days.map(d=>`<tr><td class="mono">${d}</td><td><input class="field-input" data-cadence-day="${d}" value="${escapeHtml(state.cadence[d])}"></td></tr>`).join('')
+  }</tbody></table>`;
+  table.querySelectorAll('[data-cadence-day]').forEach(inp=>{
+    inp.addEventListener('change', e=>{ state.cadence[e.target.dataset.cadenceDay] = e.target.value; save(); renderHome(); });
+  });
+}
+
+/* ============================================================
+   RENDER: QUESTS
+   ============================================================ */
+let questFilter = {status:'All', q:''};
+function renderQuestFilters(){
+  const statuses = ['All','Locked','Available','InProgress','Completed','NeedsReview'];
+  document.getElementById('questFilters').innerHTML = statuses.map(s=>
+    `<button class="pillbtn" data-qf="${s}" aria-pressed="${questFilter.status===s}">${s.replace('InProgress','In Progress').replace('NeedsReview','Needs Review')}</button>`
+  ).join('') + `<div class="mini-search"><span aria-hidden="true">⌕</span><input type="text" id="questSearch" placeholder="Search quests" value="${escapeHtml(questFilter.q)}"></div>`;
+  document.querySelectorAll('[data-qf]').forEach(b=>b.addEventListener('click', ()=>{ questFilter.status=b.dataset.qf; renderQuests(); }));
+  document.getElementById('questSearch').addEventListener('input', e=>{ questFilter.q=e.target.value; renderQuests(); });
+}
+function renderQuests(){
+  renderQuestFilters();
+  let list = state.quests;
+  if(questFilter.status!=='All') list = list.filter(q=>q.status===questFilter.status);
+  if(questFilter.q) list = list.filter(q=>(q.title+q.objective+q.phase).toLowerCase().includes(questFilter.q.toLowerCase()));
+  document.getElementById('questGrid').innerHTML = list.map(questCard).join('') || emptyMsg('No quests match this filter.');
+}
+function questCard(q){
+  return `<div class="card">
+    <div class="top-row">
+      <span class="chip mono">${q.code}</span>
+      <span class="chip diff-${q.diff}">${q.diff}</span>
+    </div>
+    <h4>${escapeHtml(q.title)}</h4>
+    <div class="meta">${escapeHtml(q.phase)} · ${escapeHtml(q.est)}</div>
+    <p style="font-size:13px; color:var(--text-dim); flex:1;">${escapeHtml(q.objective)}</p>
+    <div class="card-foot">
+      <span class="chip status-${q.status}">${q.status.replace('InProgress','In Progress').replace('NeedsReview','Needs Review')}</span>
+      <button class="btn sm" data-open-quest="${q.id}">Open</button>
+    </div>
+  </div>`;
+}
+function emptyMsg(msg){ return `<div class="panel" style="grid-column:1/-1; text-align:center; color:var(--text-faint);">${msg}</div>`; }
+
+document.getElementById('questGrid').addEventListener('click', e=>{
+  const btn = e.target.closest('[data-open-quest]'); if(!btn) return;
+  openQuestModal(btn.dataset.openQuest);
+});
+
+function openQuestModal(id){
+  const q = state.quests.find(x=>x.id===id); if(!q) return;
+  const modal = document.getElementById('questModal');
+  modal.innerHTML = `
+    <div class="modal-head">
+      <div>
+        <div class="eyebrow">${q.code} · ${escapeHtml(q.phase)}</div>
+        <h3 id="qModalTitle" style="font-size:20px;">${escapeHtml(q.title)}</h3>
+      </div>
+      <button class="modal-close" id="qModalClose" aria-label="Close">✕</button>
+    </div>
+    <div style="display:flex; gap:8px; margin-bottom:10px;">
+      <span class="chip diff-${q.diff}">${q.diff}</span>
+      <span class="chip status-${q.status}">${q.status.replace('InProgress','In Progress').replace('NeedsReview','Needs Review')}</span>
+    </div>
+    <dl>
+      <dt>Objective</dt><dd>${escapeHtml(q.objective)}</dd>
+      <dt>Estimated time</dt><dd>${escapeHtml(q.est)}</dd>
+      <dt>Prerequisites</dt><dd>${escapeHtml(q.prereqs)}</dd>
+      <dt>Practical task</dt><dd>${escapeHtml(q.practical)}</dd>
+      <dt>Deliverable</dt><dd>${escapeHtml(q.deliverable)}</dd>
+    </dl>
+    ${q.resources.length ? `<div class="modal-section"><h5>Learning resources</h5><ul class="tight">${q.resources.map(r=>`<li><a href="${r.url}" target="_blank" rel="noopener">${escapeHtml(r.title)}</a></li>`).join('')}</ul></div>` : ''}
+    <div class="modal-section"><h5>Self-check questions</h5><ul class="tight">${q.checks.map(c=>`<li>${escapeHtml(c)}</li>`).join('')}</ul></div>
+    <div class="modal-section">
+      <h5>Status</h5>
+      <select class="field-input" id="qStatusSelect">
+        ${['Locked','Available','InProgress','Completed','NeedsReview'].map(s=>`<option value="${s}" ${s===q.status?'selected':''}>${s.replace('InProgress','In Progress').replace('NeedsReview','Needs Review')}</option>`).join('')}
+      </select>
+    </div>
+    <div class="modal-section">
+      <h5>Evidence / proof of completion</h5>
+      <textarea class="field-input" id="qEvidence" rows="3" placeholder="Link, note, or description of what you produced…">${escapeHtml(q.evidence)}</textarea>
+    </div>
+    <div style="margin-top:16px; display:flex; justify-content:flex-end; gap:8px;">
+      <button class="btn" id="qModalCancel">Close</button>
+      <button class="btn primary" id="qModalSave">Save</button>
+    </div>`;
+  document.getElementById('questModalBackdrop').classList.add('open');
+  document.getElementById('qModalClose').addEventListener('click', closeQuestModal);
+  document.getElementById('qModalCancel').addEventListener('click', closeQuestModal);
+  document.getElementById('qModalSave').addEventListener('click', ()=>{
+    q.status = document.getElementById('qStatusSelect').value;
+    q.evidence = document.getElementById('qEvidence').value;
+    save(); closeQuestModal(); renderQuests(); renderHome(); renderRoadmap();
+  });
+}
+function closeQuestModal(){ document.getElementById('questModalBackdrop').classList.remove('open'); }
+document.getElementById('questModalBackdrop').addEventListener('click', e=>{ if(e.target.id==='questModalBackdrop') closeQuestModal(); });
+
+/* ============================================================
+   RENDER: TRACK VIEWS (Network / Cloud / Computing / Cybersecurity)
+   ============================================================ */
+const TRACK_CONTENT = {
+  'view-network':{ eyebrow:'PHASES 1–2 · NETWORK SQUAD', title:'Network', track:'network',
+    desc:'Data communications, routing, switching, VLANs, WLAN, Huawei VRP and troubleshooting.',
+    topics:['OSI & TCP/IP models','Ethernet & MAC addressing','ARP, IPv4 & IPv6 fundamentals','Subnetting & CIDR','TCP vs UDP, common ports','DNS, DHCP, NAT','Static & dynamic routing, OSPF','Switching, VLANs, trunking, STP','WLAN fundamentals','Huawei VRP CLI & config']},
+  'view-cloud':{ eyebrow:'PHASE 3 · CLOUD SQUAD', title:'Cloud', track:'cloud',
+    desc:'Cloud computing models, Huawei Cloud fundamentals, and where AI/big data fit in.',
+    topics:['IaaS / PaaS / SaaS','Virtualization & containers','Compute, storage, networking basics','Identity & access concepts','Availability, scalability, elasticity','Monitoring & cloud security','Big-data concepts','AI/cloud relationship','Huawei Cloud fundamentals']},
+  'view-computing':{ eyebrow:'PHASE 4 · COMPUTING SQUAD', title:'Computing', track:'computing',
+    desc:'Linux fundamentals, openEuler, openGauss, Kunpeng and computing architecture basics.',
+    topics:['Linux CLI, processes, permissions','Users, groups, services','Filesystems & package management','Shell basics','Databases & SQL fundamentals','openEuler fundamentals','openGauss fundamentals','Kunpeng architecture concepts']},
+  'view-security':{ eyebrow:'PHASE 5 · CROSS-TRACK', title:'Cybersecurity for Competitors', track:'security',
+    desc:'Only what improves competition performance — not a standalone certification course.',
+    topics:['CIA triad','Authentication vs. authorization','Spoofing, DoS/DDoS, sniffing','Phishing & malware basics','Firewall concepts & ACLs','Segmentation & secure network design','Common misconfigurations','Basic incident troubleshooting']}
+};
+function renderTrackView(viewId){
+  const c = TRACK_CONTENT[viewId];
+  const el = document.getElementById(viewId);
+  const trackQuests = state.quests.filter(q=>q.track===c.track || q.track==='cross');
+  const trackResources = state.resources.filter(r=>r.track===c.track || r.track==='cross').slice(0,6);
+  el.innerHTML = `
+    <div class="view-head">
+      <div class="eyebrow">${c.eyebrow}</div>
+      <h2>${c.title}</h2>
+      <p class="desc">${c.desc}</p>
+    </div>
+    <div class="grid cols-2">
+      <div class="panel">
+        <h3>Core topics</h3>
+        <ul class="tight" style="padding-left:18px; font-size:13.5px; color:var(--text-dim);">
+          ${c.topics.map(t=>`<li style="margin-bottom:6px;">${escapeHtml(t)}</li>`).join('')}
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Linked quests</h3>
+        ${trackQuests.map(q=>`<div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border-soft); font-size:13px;">
+          <span>${q.code} — ${escapeHtml(q.title)}</span>
+          <span class="chip status-${q.status}" style="flex-shrink:0;">${q.status.replace('InProgress','In Progress').replace('NeedsReview','Needs Review')}</span>
+        </div>`).join('') || '<p style="color:var(--text-faint); font-size:13px;">No quests tagged yet.</p>'}
+      </div>
+    </div>
+    <div class="panel" style="margin-top:16px;">
+      <h3>Recommended resources <span class="badge"><button class="pillbtn" style="padding:2px 10px;" data-nav-to="view-resources">see all</button></span></h3>
+      <div class="grid cols-3">${trackResources.map(resourceCard).join('') || '<p style="color:var(--text-faint); font-size:13px;">No resources tagged yet.</p>'}</div>
+    </div>`;
+}
+
+/* ============================================================
+   RENDER: LABS
+   ============================================================ */
+function renderLabs(){
+  document.getElementById('labGrid').innerHTML = state.labs.map(l=>`
+    <div class="card">
+      <div class="top-row"><span class="chip mono">LEVEL ${l.level}</span><span class="chip status-${l.status.replace(' ','')}">${l.status}</span></div>
+      <h4>${escapeHtml(l.name)}</h4>
+      <textarea class="field-input" data-lab-notes="${l.level}" rows="2" placeholder="Notes / evidence…">${escapeHtml(l.notes)}</textarea>
+      <select class="field-input" data-lab-status="${l.level}">
+        ${['Locked','Available','In Progress','Completed','Needs Review'].map(s=>`<option ${s===l.status?'selected':''}>${s}</option>`).join('')}
+      </select>
+    </div>`).join('');
+  document.querySelectorAll('[data-lab-status]').forEach(sel=>sel.addEventListener('change', e=>{
+    const lvl = +e.target.dataset.labStatus;
+    state.labs.find(l=>l.level===lvl).status = e.target.value; save(); renderLabs();
+  }));
+  document.querySelectorAll('[data-lab-notes]').forEach(ta=>ta.addEventListener('change', e=>{
+    const lvl = +e.target.dataset.labNotes;
+    state.labs.find(l=>l.level===lvl).notes = e.target.value; save();
+  }));
+}
+
+/* ============================================================
+   RENDER: MOCK EXAMS
+   ============================================================ */
+function renderMocks(){
+  const readiness = computeReadiness();
+  document.getElementById('readinessBadge').textContent = readiness+'%';
+  document.getElementById('readinessBar').style.width = readiness+'%';
+  const t = document.getElementById('mockTable');
+  t.innerHTML = `<thead><tr><th>Mock</th><th>Score %</th><th>Time</th><th>Accuracy %</th><th>Unanswered</th><th>Weak topics</th></tr></thead>
+  <tbody>${state.mocks.map(m=>`<tr>
+    <td>${escapeHtml(m.name)}</td>
+    <td><input class="field-input" style="width:70px;" type="number" min="0" max="100" data-mock="${m.id}" data-field="score" value="${m.score}"></td>
+    <td><input class="field-input" style="width:80px;" data-mock="${m.id}" data-field="time" value="${escapeHtml(m.time)}" placeholder="e.g. 42m"></td>
+    <td><input class="field-input" style="width:70px;" type="number" min="0" max="100" data-mock="${m.id}" data-field="accuracy" value="${m.accuracy}"></td>
+    <td><input class="field-input" style="width:60px;" type="number" min="0" data-mock="${m.id}" data-field="unanswered" value="${m.unanswered}"></td>
+    <td><input class="field-input" data-mock="${m.id}" data-field="weaknesses" value="${escapeHtml(m.weaknesses)}" placeholder="e.g. OSPF, ACLs"></td>
+  </tr>`).join('')}</tbody>`;
+  t.querySelectorAll('[data-mock]').forEach(inp=>inp.addEventListener('change', e=>{
+    const m = state.mocks.find(x=>x.id===e.target.dataset.mock);
+    m[e.target.dataset.field] = e.target.value; save(); renderMocks(); renderHome();
+  }));
+}
+
+/* ============================================================
+   RENDER: MISTAKE BANK
+   ============================================================ */
+function renderMistakes(){
+  const t = document.getElementById('mistakeTable');
+  if(!state.mistakes.length){ t.innerHTML = '<tbody><tr><td style="color:var(--text-faint);">No mistakes logged yet — that is either great news or a sign you need to attempt more timed quizzes.</td></tr></tbody>'; return; }
+  t.innerHTML = `<thead><tr><th>Topic</th><th>Why wrong</th><th>Correct concept</th><th>Source</th><th>Re-test</th><th></th></tr></thead>
+  <tbody>${state.mistakes.map(m=>`<tr>
+    <td>${escapeHtml(m.topic)}</td><td>${escapeHtml(m.why)}</td><td>${escapeHtml(m.correct)}</td>
+    <td>${escapeHtml(m.source)}</td><td class="mono">${m.retest?fmtDate(m.retest):'—'}</td>
+    <td><button class="btn sm ghost" data-del-mistake="${m.id}">Delete</button></td>
+  </tr>`).join('')}</tbody>`;
+  t.querySelectorAll('[data-del-mistake]').forEach(b=>b.addEventListener('click', e=>{
+    state.mistakes = state.mistakes.filter(m=>m.id!==e.target.dataset.delMistake); save(); renderMistakes(); renderHome();
+  }));
+}
+document.getElementById('mistakeForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  state.mistakes.unshift({
+    id: uid('mistake'),
+    topic: document.getElementById('mTopic').value,
+    why: document.getElementById('mWhy').value,
+    correct: document.getElementById('mCorrect').value,
+    source: document.getElementById('mSource').value,
+    retest: document.getElementById('mRetest').value
+  });
+  e.target.reset(); save(); renderMistakes(); renderHome();
+});
+document.getElementById('quickMistake').addEventListener('click', ()=>showView('view-mistakes'));
+
+/* ============================================================
+   RENDER: RESOURCES
+   ============================================================ */
+let resourceFilter = {type:'All', track:'All', q:''};
+function renderResourceFilters(){
+  const types = ['All','Official Huawei','Network','Cloud','Computing','Cybersecurity','Linux','YouTube','Past Questions','Labs','Reference'];
+  document.getElementById('resourceFilters').innerHTML = types.map(t=>
+    `<button class="pillbtn" data-rf="${t}" aria-pressed="${resourceFilter.type===t}">${t}</button>`
+  ).join('') + `<div class="mini-search"><span aria-hidden="true">⌕</span><input type="text" id="resourceSearch2" placeholder="Search resources" value="${escapeHtml(resourceFilter.q)}"></div>`;
+  document.querySelectorAll('[data-rf]').forEach(b=>b.addEventListener('click', ()=>{ resourceFilter.type=b.dataset.rf; renderResources(); }));
+  document.getElementById('resourceSearch2').addEventListener('input', e=>{ resourceFilter.q=e.target.value; renderResources(); });
+}
+function resourceCard(r){
+  return `<div class="card">
+    <div class="top-row"><span class="chip">${escapeHtml(r.type)}</span><span class="chip mono">${escapeHtml(r.diff)}</span></div>
+    <h4 style="font-size:14.5px;">${escapeHtml(r.t)}</h4>
+    <div class="meta">${escapeHtml(r.p)} · ${escapeHtml(r.track)}</div>
+    <p style="font-size:13px; color:var(--text-dim); flex:1;">${escapeHtml(r.why)}</p>
+    <div class="card-foot"><a class="btn sm" href="${r.url}" target="_blank" rel="noopener">Open ↗</a></div>
+  </div>`;
+}
+function renderResources(){
+  renderResourceFilters();
+  let list = state.resources;
+  if(resourceFilter.type!=='All') list = list.filter(r=>r.type===resourceFilter.type);
+  if(resourceFilter.q) list = list.filter(r=>(r.t+r.p+r.why).toLowerCase().includes(resourceFilter.q.toLowerCase()));
+  document.getElementById('resourceGrid').innerHTML = list.map(resourceCard).join('') || emptyMsg('No resources match this filter.');
+}
+
+/* ============================================================
+   RENDER: COMPETITION RADAR
+   ============================================================ */
+function renderRadar(){
+  document.getElementById('radarContent').innerHTML = `
+    <div class="grid cols-2">
+      <div class="panel">
+        <h3>Current cycle <span class="badge" style="color:var(--green); border-color:var(--green);">Confirmed</span></h3>
+        <p style="font-size:13.5px; color:var(--text-dim);">The Huawei ICT Competition <strong>2026–2027</strong> cycle is officially underway, following the 10th edition's Global Final held in Shenzhen on 9 June 2026. Practice Competition tracks remain <strong>Network, Cloud, Computing</strong> (plus <strong>Ascend AI</strong>, currently China-only).</p>
+        <p style="font-size:12px; color:var(--text-faint);">Source: <a href="https://www.huawei.com/minisite/ict-competition-2025-2026-global/en/index.html" target="_blank" rel="noopener">Huawei ICT Competition minisite</a></p>
+      </div>
+      <div class="panel">
+        <h3>Global progression <span class="badge" style="color:var(--green); border-color:var(--green);">Confirmed</span></h3>
+        <p style="font-size:13.5px; color:var(--text-dim);">Structure: <strong>National Preliminary → National Final → Regional Final → Global Final</strong>. Earlier stages are written/theory; Regional and Global stages move to lab-based assessment.</p>
+        <p style="font-size:12px; color:var(--text-faint);">Source: Huawei ICT Competition official material</p>
+      </div>
+    </div>
+    <div class="grid cols-2" style="margin-top:16px;">
+      <div class="panel">
+        <h3>Nigeria-specific status <span class="badge" style="color:var(--amber); border-color:var(--amber);">Unconfirmed</span></h3>
+        <div class="callout" style="margin-bottom:10px;">Nigeria-specific 2026–2027 dates have not been publicly verified yet.</div>
+        <p style="font-size:13.5px; color:var(--text-dim);">Context: in the 2025–2026 cycle, a 15-member Nigerian delegation (drawn from Ahmadu Bello University, University of Lagos, FUT Minna, University of Port Harcourt, Nasarawa State University and Igbinedion University) reached the Global Final and won grand prizes. No confirmation has been found of University of Ilorin's participation, or of any 2026–2027 Nigeria registration window — treat this as <strong>historical reference</strong>, not a guarantee for this cycle.</p>
+        <a class="btn sm" href="https://e.huawei.com/en/talent/portal/#/" target="_blank" rel="noopener">Check official update ↗</a>
+      </div>
+      <div class="panel">
+        <h3>Editable status fields</h3>
+        <label class="flabel" for="radarVerified">Last verified by this team</label>
+        <input class="field-input" id="radarVerified" type="date" value="${state.settings.lastVerified}" style="margin-bottom:10px;">
+        <label class="flabel" for="radarNote">Nigeria / UNILORIN status note</label>
+        <textarea class="field-input" id="radarNote" rows="3" placeholder="Update when your team confirms registration details…">${escapeHtml(state.radarNote||'')}</textarea>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:16px;">
+      <h3>Source links</h3>
+      <ul class="tight" style="padding-left:18px; font-size:13.5px;">
+        <li><a href="https://e.huawei.com/en/talent/portal/#/" target="_blank" rel="noopener">Huawei Talent Portal</a> — account & registration</li>
+        <li><a href="https://talent.shixizhi.huawei.com/center/privateCenter.htm" target="_blank" rel="noopener">Huawei ICT Competition Learning Space</a></li>
+        <li><a href="https://e.huawei.com/en/talent/ict-academy" target="_blank" rel="noopener">Huawei ICT Academy</a></li>
+        <li><a href="https://www.huawei.com/en/news/2026/6/ict-competition-global" target="_blank" rel="noopener">10th Huawei ICT Competition Global Final recap (historical)</a></li>
+      </ul>
+    </div>`;
+  document.getElementById('radarVerified').addEventListener('change', e=>{ state.settings.lastVerified = e.target.value; save(); });
+  document.getElementById('radarNote').addEventListener('change', e=>{ state.radarNote = e.target.value; save(); });
+}
+
+/* ============================================================
+   RENDER: TEAM
+   ============================================================ */
+function renderTeam(){
+  const avg = teamAverage('baseline');
+  const strongest = topWeakTopic(true), weakest = topWeakTopic(false);
+  document.getElementById('teamStats').innerHTML = [
+    statCard('Members', state.members.length, 'in the practice pool'),
+    statCard('Avg baseline', avg!==null? avg+'%':'—', 'weighted score'),
+    statCard('Strongest area', strongest, 'across the team'),
+    statCard('Weakest area', weakest, 'prioritize here')
+  ].join('');
+  document.getElementById('teamGrid').innerHTML = state.members.map(memberCard).join('');
+  bindMemberEvents();
+}
+function topWeakTopic(strongest){
+  const keys = {networking:'Networking',computing:'Computing/Linux',cloud:'Cloud/AI',security:'Cybersecurity',problem:'Problem solving',practical:'Practical troubleshooting',discipline:'Learning discipline'};
+  const avgs = Object.keys(keys).map(k=>{
+    const vals = state.members.map(m=>parseFloat(m.baseline[k])).filter(v=>!isNaN(v));
+    return {k, label:keys[k], avg: vals.length? vals.reduce((a,b)=>a+b,0)/vals.length : null};
+  }).filter(x=>x.avg!==null);
+  if(!avgs.length) return '—';
+  avgs.sort((a,b)=> strongest ? b.avg-a.avg : a.avg-b.avg);
+  return avgs[0].label;
+}
+function memberCard(m){
+  const fields = [['networking','Network'],['computing','Compute'],['cloud','Cloud'],['security','Security'],['problem','Problem'],['practical','Practical'],['discipline','Discipline']];
+  return `<div class="member-card" data-member="${m.id}">
+    <div class="name-row">
+      <div class="avatar">${escapeHtml((m.name||'?').slice(0,2).toUpperCase())}</div>
+      <input class="field-input" data-mfield="name" value="${escapeHtml(m.name)}" style="flex:1;">
+    </div>
+    <label class="flabel">Track</label>
+    <select class="field-input" data-mfield="track">
+      ${['Network','Cloud/Computing'].map(t=>`<option ${t===m.track?'selected':''}>${t}</option>`).join('')}
+    </select>
+    <div class="score-grid">
+      ${fields.map(([k,l])=>`<div class="fi"><label>${l} %</label><input class="field-input" type="number" min="0" max="100" data-bfield="${k}" value="${m.baseline[k]}"></div>`).join('')}
+    </div>
+    <div class="score-grid" style="margin-top:4px;">
+      <div class="fi"><label>Current score %</label><input class="field-input" type="number" min="0" max="100" data-mfield="current" value="${m.current}"></div>
+      <div class="fi"><label>Quests done</label><input class="field-input" type="number" min="0" data-mfield="quests" value="${m.quests}"></div>
+      <div class="fi"><label>Lab score %</label><input class="field-input" type="number" min="0" max="100" data-mfield="labScore" value="${m.labScore}"></div>
+      <div class="fi"><label>Mock score %</label><input class="field-input" type="number" min="0" max="100" data-mfield="mockScore" value="${m.mockScore}"></div>
+    </div>
+    <div class="fi" style="margin-top:6px;"><label class="flabel">Weak areas</label><input class="field-input" data-mfield="weak" value="${escapeHtml(m.weak)}" placeholder="e.g. OSPF, subnetting speed"></div>
+    <div style="text-align:right; margin-top:8px;"><button class="btn sm ghost" data-remove-member="${m.id}" style="color:var(--red); border-color:var(--red);">Remove</button></div>
+  </div>`;
+}
+function bindMemberEvents(){
+  document.querySelectorAll('[data-member]').forEach(card=>{
+    const id = card.dataset.member; const m = state.members.find(x=>x.id===id);
+    card.querySelectorAll('[data-mfield]').forEach(inp=>inp.addEventListener('change', e=>{ m[e.target.dataset.mfield]=e.target.value; save(); renderTeam(); renderHome(); }));
+    card.querySelectorAll('[data-bfield]').forEach(inp=>inp.addEventListener('change', e=>{ m.baseline[e.target.dataset.bfield]=e.target.value; save(); renderTeam(); renderHome(); }));
+  });
+  document.querySelectorAll('[data-remove-member]').forEach(b=>b.addEventListener('click', e=>{
+    if(!confirm('Remove this member? This cannot be undone.')) return;
+    state.members = state.members.filter(m=>m.id!==e.target.dataset.removeMember); save(); renderTeam();
+  }));
+}
+document.getElementById('addMemberBtn').addEventListener('click', ()=>{
+  state.members.push({id:uid('mem'), name:'New member', track:'Network', baseline:{networking:'',computing:'',cloud:'',security:'',problem:'',practical:'',discipline:''}, current:'', quests:0, labScore:'', mockScore:'', confidence:'', attendance:'', weak:''});
+  save(); renderTeam();
+});
+
+/* ============================================================
+   RENDER: TEAM LEAD CONSOLE
+   ============================================================ */
+function renderConsole(){
+  const c = state.console;
+  document.getElementById('objectivesList').innerHTML = listWithDelete(c.objectives, 'obj');
+  document.getElementById('actionList').innerHTML = listWithDelete(c.actions, 'act');
+  document.getElementById('decisionList').innerHTML = listWithDelete(c.decisions, 'dec');
+  document.getElementById('teamNotes').value = c.notes || '';
+  bindConsoleDeletes();
+}
+function listWithDelete(arr, prefix){
+  if(!arr.length) return `<p style="color:var(--text-faint); font-size:13px;">Nothing here yet.</p>`;
+  return arr.map((item,i)=>`<div style="display:flex; justify-content:space-between; gap:8px; padding:6px 0; border-bottom:1px solid var(--border-soft); font-size:13.5px;">
+    <span>${escapeHtml(item)}</span><button class="btn sm ghost" data-del="${prefix}:${i}">✕</button></div>`).join('');
+}
+function bindConsoleDeletes(){
+  document.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click', e=>{
+    const [prefix, idx] = e.target.dataset.del.split(':');
+    const map = {obj:'objectives', act:'actions', dec:'decisions'};
+    state.console[map[prefix]].splice(+idx,1); save(); renderConsole();
+  }));
+}
+document.getElementById('objectiveForm').addEventListener('submit', e=>{ e.preventDefault(); const v=document.getElementById('objectiveInput').value.trim(); if(v){ state.console.objectives.push(v); save(); renderConsole(); } e.target.reset(); });
+document.getElementById('actionForm').addEventListener('submit', e=>{ e.preventDefault(); const v=document.getElementById('actionInput').value.trim(); if(v){ state.console.actions.push(v); save(); renderConsole(); } e.target.reset(); });
+document.getElementById('decisionForm').addEventListener('submit', e=>{ e.preventDefault(); const v=document.getElementById('decisionInput').value.trim(); if(v){ state.console.decisions.push(new Date().toISOString().slice(0,10)+' — '+v); save(); renderConsole(); } e.target.reset(); });
+document.getElementById('teamNotes').addEventListener('change', e=>{ state.console.notes = e.target.value; save(); });
+
+/* ============================================================
+   RENDER: SETTINGS
+   ============================================================ */
+function renderSettings(){
+  document.getElementById('setResume').value = state.settings.schoolResumeDate;
+  document.getElementById('setVerified').value = state.settings.lastVerified;
+  document.getElementById('schoolModeToggle').checked = state.settings.schoolMode;
+}
+document.getElementById('setResume').addEventListener('change', e=>{ state.settings.schoolResumeDate = e.target.value; save(); renderHome(); });
+document.getElementById('setVerified').addEventListener('change', e=>{ state.settings.lastVerified = e.target.value; save(); });
+document.getElementById('schoolModeToggle').addEventListener('change', e=>{
+  state.settings.schoolMode = e.target.checked; save(); applySchoolMode(); renderHome();
+});
+function applySchoolMode(){ document.getElementById('schoolPill').classList.toggle('on', !!state.settings.schoolMode); }
+
+document.getElementById('exportBtn').addEventListener('click', ()=>{
+  const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'ift-huawei-dashboard-backup-'+new Date().toISOString().slice(0,10)+'.json';
+  document.body.appendChild(a); a.click(); a.remove();
+});
+document.getElementById('importInput').addEventListener('change', e=>{
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    try{
+      const imported = JSON.parse(reader.result);
+      state = Object.assign(defaultState(), imported);
+      save(); renderAll(); alert('Backup imported successfully.');
+    }catch(err){ alert('Could not read that file — is it a valid backup .json?'); }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+});
+document.getElementById('resetBtn').addEventListener('click', ()=>{
+  if(!confirm('This will erase all locally-saved progress and cannot be undone. Continue?')) return;
+  state = defaultState(); save(); renderAll(); applyTheme(); applySchoolMode();
+});
+
+/* ============================================================
+   GLOBAL SEARCH
+   ============================================================ */
+document.getElementById('globalSearch').addEventListener('keydown', e=>{
+  if(e.key!=='Enter') return;
+  const v = e.target.value.trim();
+  if(!v) return;
+  questFilter.q = v; resourceFilter.q = v;
+  showView('view-resources');
+  renderResources();
+});
+
+/* ============================================================
+   INIT
+   ============================================================ */
+function renderAll(){
+  renderHome(); renderRoadmap(); renderQuests(); renderLabs(); renderMocks();
+  renderMistakes(); renderResources(); renderRadar(); renderTeam(); renderConsole(); renderSettings();
+}
+buildNav();
+applyTheme();
+applySchoolMode();
+renderAll();
+showView('view-home');
+</script>
+</body>
+</html>
